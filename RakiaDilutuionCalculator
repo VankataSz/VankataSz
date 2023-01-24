@@ -1,0 +1,50 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Please enter how many litters of rakia you want to dilute.");
+
+        double rakiaLitters = Double.parseDouble(scanner.nextLine());
+
+        System.out.println("Please enter the current degrees of your rakia .");
+
+        double currentDegreeOfRakia = Double.parseDouble(scanner.nextLine());
+
+        System.out.println("Please enter the new desired degree of the rakia.");
+
+        double newDegreeOfTheRakia = Double.parseDouble(scanner.nextLine());
+
+
+        double result = calculateWaterToAdd(rakiaLitters, currentDegreeOfRakia, newDegreeOfTheRakia);
+        double amountOfRakiaAfterDilute = result + rakiaLitters;
+
+        if (result < 1) {
+
+            System.out.printf("You need to add: %.3f milliliters of distilled water.%n", result);
+
+        } else {
+
+            System.out.printf("You need to add: %.3f liters of distilled water.%n", result);
+        }
+
+        if (amountOfRakiaAfterDilute < 1) {
+
+            System.out.printf("New amount of the rakia is: %.3f milliliters.", amountOfRakiaAfterDilute);
+
+        } else {
+            System.out.printf("New amount of the rakia is: %.3f liters.", amountOfRakiaAfterDilute);
+
+        }
+
+
+    }
+
+    private static double calculateWaterToAdd(double rakiaLitters, double currentDegreeOfRakia, double newDegreeOfRakia) {
+
+        return (currentDegreeOfRakia - newDegreeOfRakia) / newDegreeOfRakia * rakiaLitters;
+
+    }
+
+}

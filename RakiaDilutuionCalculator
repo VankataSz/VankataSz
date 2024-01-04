@@ -1,3 +1,8 @@
+/*
+This is basic dilution calculator for the bulgarian elexir called Rakia.
+Basicly works this way : you must add how many liters of rakia you want to dilude, 
+then you add the current degrees of the magic drink rakia, and finaly  you should add the desired degrees.
+*/
 import java.util.Scanner;
 
 public class Main {

@@ -1,0 +1,168 @@
+/*
+This is a simple java 2d array game from the SoftUni educational program.
+
+You will be given an integer n for the size of the bee territory with a square shape. 
+On the next n lines, you will receive the rows of the territory. The bee will be placed in a random position, marked with the letter 'B'.
+On random positions, there will be flowers, marked with 'f'. There may also be a bonus on the territory.
+There will always be only one bonus. It will be marked with the letter - 'O'. 
+All of the empty positions will be marked with '.'.
+
+Each turn, you will be given a command for the bee’s movement.
+
+The commands will be: "up", "down", "left", "right", "End".
+
+If the bee moves to a flower, it pollinates the flower and increases pollinated flowers with one.
+
+If it goes to a bonus, the bee gets a bonus one moves forward and then the bonus disappears. 
+If the bee goes out she can't return back and the program ends. 
+If the bee receives the "End" command the program ends. 
+The bee needs at least 5 pollinated flowers.
+
+Input
+
+· On the first line, you are given the integer n – the size of the square matrix.
+
+· The next n lines hold the values for every row.
+
+· On each of the next lines, until you receive the "End" command, you will receive a move command.
+
+Output
+
+· On the first line:
+
+o If the bee goes out of its territory print: "The bee got lost!"
+
+· On the second line:
+
+o If the bee couldn’t pollinate enough flowers print: "The bee couldn't pollinate the flowers, she needed {needed} flowers more"
+
+o If the bee successfully pollinated enough flowers print: "Great job, the bee manage to pollinate {polinationed flowers} flowers!"
+
+· At the end print the matrix.
+
+Constraints
+
+· The size of the square matrix will be between [2…10].
+
+· There will always be 0 or 1 bonus, marked with - 'O'.
+
+· The bee position will be marked with 'B'.
+
+· There won't be a case where a bonus moves the bee out of its territory.
+
+Examples:
+
+Input:
+
+5
+Bff..
+..O..
+f.f.f
+.....
+fffff
+right
+right
+down
+left
+left
+down
+down
+right
+down
+
+Output:
+
+The bee got lost! 
+Great job, the bee manage to pollinate 6 flowers!
+.....
+.....
+....f
+.....
+..fff
+
+*/
+
+//Solution 
+
+
+import java.util.Scanner;
+
+public class Bee {
+
+    public static int beeRow;
+    public static int beeCol;
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        int size = Integer.parseInt(scanner.nextLine());
+
+        char[][] matrix = new char[size][size];
+
+        for (int row = 0; row < size; row++) {
+
+            char[] singleRow = scanner.nextLine().toCharArray();
+
+            for (int col = 0; col < size; col++) {
+
+                matrix[row][col] = singleRow[col];
+
+                if (matrix[row][col] == 'B') {
+                    beeRow = row;
+                    beeCol = col;
+                }
+
+            }
+        }
+
+        int flowers = 0;
+        String command = scanner.nextLine();
+
+        while (!command.equals("End")) {
+
+            //before move -> .
+            matrix[beeRow][beeCol] = '.';
+
+            if (command.equals("right") && beeCol != size - 1) {
+                beeCol++;
+            } else if (command.equals("left") && beeCol != 0) {
+                beeCol--;
+            } else if (command.equals("down") && beeRow != size - 1) {
+                beeRow++;
+            } else if (command.equals("up") && beeRow != 0) {
+                beeRow--;
+            } else {
+                matrix[beeRow][beeCol] = '.';
+                System.out.println("The bee got lost");
+                break;
+            }
+
+            if (matrix[beeRow][beeCol] == 'f') {
+                flowers++;
+            } else if (matrix[beeRow][beeCol] == 'O') {
+                continue;
+            }
+
+
+            matrix[beeRow][beeCol] = 'B';
+            command = scanner.nextLine();
+        }
+
+
+        if (flowers < 5) {
+            System.out.printf("The bee couldn't pollinate the flowers, she needed %d flowers more%n", 5 - flowers);
+        } else {
+            System.out.printf("Great job, the bee manage to pollinate %d flowers!%n", flowers);
+        }
+
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(matrix[i][j]);
+            }
+            System.out.println();
+        }
+
+    }
+}

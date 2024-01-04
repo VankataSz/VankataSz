@@ -1,0 +1,178 @@
+/*
+This is a simple Java 2d array game from the SoftUni educational program.
+
+The game starts with 0 collected hazelnuts. Your goal is to collect 3 of them.
+You get as input the size of the field, which will be always a square shape.
+After that, you will receive the directions in which the squirrel can move – "left", "right", "down", and "up" in a sequence, each value separated by a comma and a space (", "). 
+On the next rows, you will receive the field.
+
+Possible characters in the field:
+s - represents the squirrel's position.
+h – represents a hazelnut. 
+* – the asterisk represents an empty position.
+t – represents a trap.
+
+The squirrel starts from the s - position.
+If the squirrel steps on a hazelnut, you have to increase them by 1. The position should be marked with an asterisk (*).
+If the squirrel collects all 3 hazelnuts, the game ends.
+Asterisk (*) does nothing, so nothing happens if the squirrel steps on it.
+If it steps on a trap, the game ends.
+If the squirrel moves out of the field, the game ends.
+
+After all commands you will have 4 possible results:
+You win if the squirrel collects 3 of the hazelnuts.
+The squirrel collects less than 3 hazelnuts.
+The squirrel steps on a trap.
+The squirrel moves out of the field.
+
+Input
+On the first line, you will receive the length of the field – an integer number in the range [3, 5].
+On the second line, you will receive the commands to move the squirrel – an array of strings separated by ", ".
+In the next N lines, you will receive the values for every row.
+
+Output
+On the first line:
+If the squirrel goes out of the field - "The squirrel is out of the field.".
+If the squirrel steps on a trap - "Unfortunately, the squirrel stepped on a trap...".
+If the squirrel hasn’t collected all hazelnuts - "There are more hazelnuts to collect.".
+If the squirrel has collected all hazelnuts - "Good job! You have collected all hazelnuts!".
+On the second line, print the number of collected hazelnuts - "Hazelnuts collected: {hazelnutsCount}"
+
+Constraints
+The size of the field will be between [3,5].
+There could be one or no trap on the field.
+There will always be 3 hazelnuts on the field.
+
+Example Input/Output:
+
+Input:
+5
+left, left, up, right, up, up
+**h**
+t****
+*h***
+*h*s*
+*****
+
+Output:
+Good job! You have collected all hazelnuts!
+Hazelnuts collected: 3
+
+-----------------------------------------------------
+Input:
+4
+down, down, right, right
+*s*h
+***h
+***t
+h***
+
+Output:
+Unfortunately, the squirrel stepped on a trap...
+Hazelnuts collected: 0
+
+---------------------------------------------------
+
+Input:
+4
+down, down, right, right
+h***
+***h
+*s*t
+**h*
+
+Output:
+The squirrel is out of the field.
+Hazelnuts collected: 0
+
+
+*/
+
+//Solution
+
+import java.util.Scanner;
+
+public class TheSquirrel {
+
+    public static int squirrelRow;
+    public static int squirrelCol;
+
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int fieldSize = Integer.parseInt(scanner.nextLine());
+
+        String[] commands = scanner.nextLine().split(", ");
+
+        char[][] field = new char[fieldSize][fieldSize];
+
+        for (int row = 0; row < fieldSize; row++) {
+            char[] fieldRow = scanner.nextLine().toCharArray();
+            for (int col = 0; col < fieldSize; col++) {
+                field[row][col] = fieldRow[col];
+
+                if(field[row][col] == 's') {
+                    squirrelRow = row;
+                    squirrelCol = col;
+                }
+            }
+        }
+
+        int collectedHazelnuts = 0;
+        boolean isTrap = false;
+        boolean isOutOfTheField = false;
+
+        for (int i = 0; i < commands.length; i++) {
+
+            String command = commands[i];
+
+            field[squirrelRow][squirrelCol] = '*';
+
+            if(command.equals("up") && squirrelRow != 0) {
+                squirrelRow--;
+            } else if(command.equals("down") && squirrelRow != fieldSize - 1) {
+                squirrelRow++;
+            } else if(command.equals("left") && squirrelCol != 0) {
+                squirrelCol--;
+            } else if(command.equals("right") && squirrelCol != fieldSize - 1) {
+                squirrelCol++;
+            } else {
+               // field[squirrelRow][squirrelCol] = '*';
+                System.out.println("The squirrel is out of the field.");
+                System.out.printf("Hazelnuts collected: %d",collectedHazelnuts);
+                isOutOfTheField = true;
+                break;
+            }
+
+            if(field[squirrelRow][squirrelCol] == 'h') {
+
+                collectedHazelnuts++;
+                field[squirrelRow][squirrelCol] = '*';
+            } else if(field[squirrelRow][squirrelCol] == 't') {
+
+                field[squirrelRow][squirrelCol] = '*';
+                System.out.println("Unfortunately, the squirrel stepped on a trap...");
+                System.out.printf("Hazelnuts collected: %d",collectedHazelnuts);
+                isTrap = true;
+                break;
+
+            }
+
+            if(collectedHazelnuts == 3) {
+                System.out.println("Good job! You have collected all hazelnuts!");
+                System.out.printf("Hazelnuts collected: %d",collectedHazelnuts);
+                field[squirrelRow][squirrelCol] = 's';
+                return;
+            }
+
+            field[squirrelRow][squirrelCol] = 's';
+
+        }
+
+        if(collectedHazelnuts < 3 && !isTrap && !isOutOfTheField ) {
+            System.out.println("There are more hazelnuts to collect.");
+            System.out.printf("Hazelnuts collected: %d",collectedHazelnuts);
+        }
+    }
+}
